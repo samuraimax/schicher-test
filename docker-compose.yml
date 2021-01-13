@@ -1,0 +1,57 @@
+version: "3"
+services:
+  #PHP Service
+  schicher_app:
+    image: samuraimax/php-composer-npm:latest
+    container_name: schicher_app
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    depends_on:
+      - schicher_db
+    environment:
+      # SERVICE_NAME: schicher_app
+      SERVICE_TAGS: dev
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - schicher-network
+
+  #nginx Service
+  schicher_webserver:
+    image: nginx:latest
+    container_name: schicher_webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - schicher_app
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/:/etc/nginx/conf.d/
+    networks:
+      - schicher-network
+
+  schicher_db:
+    image: mariadb:latest
+    container_name: schicher_db
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./docker/dbdata:/var/lib/mysql
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: schicher_db
+      MYSQL_ROOT_PASSWORD: 1234567890
+      SERVICE_TAGS: dev
+      # SERVICE_NAME: mysql
+    networks:
+      - schicher-network
+
+networks:
+  schicher-network:
+    driver: bridge
