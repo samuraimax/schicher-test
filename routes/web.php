@@ -21,3 +21,12 @@ Route::match(['get', 'post'], '/dashboard', function(){
 Route::view('/pages/slick', 'pages.slick');
 Route::view('/pages/datatables', 'pages.datatables');
 Route::view('/pages/blank', 'pages.blank');
+
+Route::prefix('backend')->group(function () {
+    Route::get('/login', 'backend\Auth\AuthController@login')->name('backend.auth.login');
+    Route::post('/checklogin', 'backend\Auth\AuthController@checklogin')->name('backend.auth.checklogin');
+    Route::get('/logout', 'backend\Auth\AuthController@logout')->name('backend.auth.logout');
+    Route::get('/user/selecttent', 'backend\UserController@selecttent')->name('backend.user.selecttent');
+});
+
+Route::get('/home', 'HomeController@index')->name('home');
