@@ -18,11 +18,11 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::insert([
-            'name' => "".Str::random(10),
+            'name' => Str::random(10),
             'username' => 'admin',
             'email' => Str::random(10).'@gmail.com',
-            'password' => "".Hash::make('123456'),
-            'created_at' => new Date()
+            'password' => Hash::make('123456'),
+            'created_at' => date("Y-m-d H:i:s"),
         ]);
     }
 }

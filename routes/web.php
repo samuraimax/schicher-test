@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Example Routes
-Route::view('/', 'landing');
+Route::redirect('/', function () {
+    return redirect()->route('backend.auth.login');
+});
 Route::match(['get', 'post'], '/dashboard', function(){
     return view('dashboard');
 });
